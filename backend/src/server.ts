@@ -3,6 +3,8 @@ import dotenv from "dotenv";
 import cors from "cors";
 import connectDB from "./config/database";
 import authRoutes from './routes/auth.routes';
+import taskRoutes from './routes/task.routes';
+
 
 
 
@@ -25,6 +27,7 @@ const app: Application = express();
 app.use(cors());
 app.use(express.json());
 app.use("/api/auth", authRoutes);
+app.use("/api/tasks", taskRoutes);
 
 
 // test routee 
