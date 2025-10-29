@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import type { AuthState, LoginCredentials, RegisterData, User } from '../../types';
+import type { AuthState, LoginCredentials, RegisterData } from '../../types';
 import * as authService from '../../services/authService';
 import { storage } from '../../utils/localStorage';
 
@@ -7,7 +7,6 @@ import { storage } from '../../utils/localStorage';
 
 const token = storage.getToken();
 const user = storage.getUser();
-
 
 // Initial state
 const initialState: AuthState = {
@@ -19,21 +18,33 @@ const initialState: AuthState = {
 };
 
 // Async thunks (API calls)
-
+// ✅ Helper function for error handling
+const getErrorMessage = (error: unknown): string => {
+  if (error instanceof Error) {
+    return error.message;
+  }
+  if (typeof error === 'string') {
+    return error;
+  }
+  if (error && typeof error === 'object' && 'message' in error) {
+    return String(error.message);
+  }
+  return 'An unknown error occurred';
+};
 // Register user
 export const registerUser = createAsyncThunk(
   'auth/register',
   async (data: RegisterData, { rejectWithValue }) => {
     try {
       const response = await authService.register(data);
-      
+
       // Save to localStorage
       storage.setToken(response.token);
       storage.setUser(response.user);
-      
+
       return response;
-    } catch (error: any) {
-      return rejectWithValue(error.message);
+    } catch (error: unknown) {
+      return rejectWithValue(getErrorMessage(error));
     }
   }
 );
@@ -44,28 +55,25 @@ export const loginUser = createAsyncThunk(
   async (credentials: LoginCredentials, { rejectWithValue }) => {
     try {
       const response = await authService.login(credentials);
-       storage.setToken(response.token);
+      storage.setToken(response.token);
       storage.setUser(response.user);
-      
+
       return response;
-    } catch (error:any) {
-      return rejectWithValue(error.message);
+    } catch (error: unknown) {
+      return rejectWithValue(getErrorMessage(error));
     }
   }
 );
 
 // Get current user
-export const fetchCurrentUser = createAsyncThunk(
-  'auth/me',
-  async (_, { rejectWithValue }) => {
-    try {
-      const user = await authService.getCurrentUser();
-      return user;
-    } catch (error:any) {
-      return rejectWithValue(error?.message);
-    }
+export const fetchCurrentUser = createAsyncThunk('auth/me', async (_, { rejectWithValue }) => {
+  try {
+    const user = await authService.getCurrentUser();
+    return user;
+  } catch (error: unknown) {
+    return rejectWithValue(getErrorMessage(error));
   }
-);
+});
 
 // Create slice
 const authSlice = createSlice({
@@ -73,8 +81,8 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     logout: (state) => {
-          authService.logout();
-          storage.clear(); 
+      authService.logout();
+      storage.clear();
       state.user = null;
       state.token = null;
       state.isAuthenticated = false;
@@ -84,8 +92,7 @@ const authSlice = createSlice({
       state.error = null;
     },
   },
-    extraReducers: (builder) => {
-      
+  extraReducers: (builder) => {
     builder
       .addCase(registerUser.pending, (state) => {
         state.loading = true;
@@ -118,7 +125,7 @@ const authSlice = createSlice({
         state.error = action.payload as string;
       });
 
-      builder
+    builder
       .addCase(fetchCurrentUser.pending, (state) => {
         state.loading = true;
       })

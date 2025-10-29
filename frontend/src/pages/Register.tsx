@@ -1,5 +1,5 @@
-import { useState, type FormEvent } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useState, type FormEvent } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import {
   Box,
   Button,
@@ -9,9 +9,9 @@ import {
   Paper,
   Alert,
   CircularProgress,
-} from "@mui/material";
-import { useAppDispatch, useAppSelector } from "../store/hooks";
-import { registerUser, clearError } from "../store/slices/authSlice";
+} from '@mui/material';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
+import { registerUser, clearError } from '../store/slices/authSlice';
 
 function RegisterPage() {
   const dispatch = useAppDispatch();
@@ -19,10 +19,10 @@ function RegisterPage() {
   const { loading, error } = useAppSelector((state) => state.auth);
 
   const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
+    name: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
   });
 
   const { name, email, password, confirmPassword } = formData;
@@ -42,7 +42,7 @@ function RegisterPage() {
 
     // Validate passwords match
     if (password !== confirmPassword) {
-      alert("Passwords do not match!");
+      alert('Passwords do not match!');
       return;
     }
 
@@ -51,7 +51,7 @@ function RegisterPage() {
 
     // If registration successful, redirect to dashboard
     if (registerUser.fulfilled.match(result)) {
-      navigate("/dashboard");
+      navigate('/dashboard');
     }
   };
 
@@ -60,19 +60,19 @@ function RegisterPage() {
       <Box
         sx={{
           marginTop: 8,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
         }}
       >
         <Paper
           elevation={3}
           sx={{
             padding: 4,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            width: "100%",
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            width: '100%',
           }}
         >
           <Typography component="h1" variant="h5" gutterBottom>
@@ -80,16 +80,12 @@ function RegisterPage() {
           </Typography>
 
           {error && (
-            <Alert severity="error" sx={{ width: "100%", mb: 2 }}>
+            <Alert severity="error" sx={{ width: '100%', mb: 2 }}>
               {error}
             </Alert>
           )}
 
-          <Box
-            component="form"
-            onSubmit={handleSubmit}
-            sx={{ mt: 1, width: "100%" }}
-          >
+          <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1, width: '100%' }}>
             <TextField
               margin="normal"
               required
@@ -148,11 +144,11 @@ function RegisterPage() {
               sx={{ mt: 3, mb: 2 }}
               disabled={loading}
             >
-              {loading ? <CircularProgress size={24} /> : "Sign Up"}
+              {loading ? <CircularProgress size={24} /> : 'Sign Up'}
             </Button>
 
-            <Box sx={{ textAlign: "center" }}>
-              <Link to="/login" style={{ textDecoration: "none" }}>
+            <Box sx={{ textAlign: 'center' }}>
+              <Link to="/login" style={{ textDecoration: 'none' }}>
                 <Typography variant="body2" color="primary">
                   Already have an account? Sign In
                 </Typography>

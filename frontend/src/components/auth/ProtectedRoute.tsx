@@ -1,6 +1,6 @@
-import { Navigate } from "react-router-dom";
-import { useAppSelector } from "../../store/hooks";
-import { Box, CircularProgress } from "@mui/material";
+import { Navigate } from 'react-router-dom';
+import { useAppSelector } from '../../store/hooks';
+import { Box, CircularProgress } from '@mui/material';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -14,10 +14,10 @@ function ProtectedRoute({ children }: ProtectedRouteProps) {
     return (
       <Box
         sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          minHeight: "100vh",
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          minHeight: '100vh',
         }}
       >
         <CircularProgress />

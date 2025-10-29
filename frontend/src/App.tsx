@@ -1,24 +1,19 @@
-import { Box } from "@mui/material";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
-} from "react-router-dom";
-import LoginPage from "./pages/Login";
-import RegisterPage from "./pages/Register";
-import ProtectedRoute from "./components/auth/ProtectedRoute";
-import DashboardPage from "./pages/Dashboard";
+import { Box } from '@mui/material';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import LoginPage from './pages/Login';
+import RegisterPage from './pages/Register';
+import ProtectedRoute from './components/auth/ProtectedRoute';
+import DashboardPage from './pages/Dashboard';
 function App() {
   return (
     <Router>
       <Box
         sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          minHeight: "100vh",
-          bgcolor: "background.default",
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          minHeight: '100vh',
+          bgcolor: 'background.default',
         }}
       >
         <Routes>

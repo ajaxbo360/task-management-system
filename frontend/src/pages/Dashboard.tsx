@@ -1,7 +1,7 @@
-import { useNavigate } from "react-router-dom";
-import { Container, Box, Typography, Button, Paper, Grid } from "@mui/material";
-import { useAppDispatch, useAppSelector } from "../store/hooks";
-import { logout } from "../store/slices/authSlice";
+import { useNavigate } from 'react-router-dom';
+import { Container, Box, Typography, Button, Paper, Grid } from '@mui/material';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
+import { logout } from '../store/slices/authSlice';
 
 function DashboardPage() {
   const dispatch = useAppDispatch();
@@ -10,7 +10,7 @@ function DashboardPage() {
 
   const handleLogout = () => {
     dispatch(logout());
-    navigate("/login");
+    navigate('/login');
   };
 
   return (
@@ -19,9 +19,9 @@ function DashboardPage() {
         <Paper sx={{ p: 4 }}>
           <Box
             sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
               mb: 4,
             }}
           >
@@ -42,39 +42,39 @@ function DashboardPage() {
           </Typography>
 
           <Grid container spacing={3}>
-            <Grid item xs={12} md={4}>
+            <Grid size={{ xs: 12, md: 4 }}>
               <Paper
                 sx={{
                   p: 3,
-                  textAlign: "center",
-                  bgcolor: "primary.main",
-                  color: "white",
+                  textAlign: 'center',
+                  bgcolor: 'primary.main',
+                  color: 'white',
                 }}
               >
                 <Typography variant="h3">0</Typography>
                 <Typography variant="body1">Total Tasks</Typography>
               </Paper>
             </Grid>
-            <Grid item xs={12} md={4}>
+            <Grid size={{ xs: 12, md: 4 }}>
               <Paper
                 sx={{
                   p: 3,
-                  textAlign: "center",
-                  bgcolor: "warning.main",
-                  color: "white",
+                  textAlign: 'center',
+                  bgcolor: 'warning.main',
+                  color: 'white',
                 }}
               >
                 <Typography variant="h3">0</Typography>
                 <Typography variant="body1">In Progress</Typography>
               </Paper>
             </Grid>
-            <Grid item xs={12} md={4}>
+            <Grid size={{ xs: 12, md: 4 }}>
               <Paper
                 sx={{
                   p: 3,
-                  textAlign: "center",
-                  bgcolor: "success.main",
-                  color: "white",
+                  textAlign: 'center',
+                  bgcolor: 'success.main',
+                  color: 'white',
                 }}
               >
                 <Typography variant="h3">0</Typography>
