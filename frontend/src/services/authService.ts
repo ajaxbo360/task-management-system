@@ -11,14 +11,21 @@ import type { LoginCredentials,  RegisterData,
 // Register new user
 
 export const register = async (data: RegisterData): Promise<AuthResponse> => {
-    const response = await api.post<ApiResponse<AuthResponse>>("auth/register", data);
+    const response = await api.post<ApiResponse<User>>("auth/register", data);
 
-    return response.data.data!;
+    return {
+    user: response.data.data!,
+    token: response.data.token!
+  };
 }
 export const login = async (credentials: LoginCredentials): Promise<AuthResponse> => {
-    const response = await api.post<ApiResponse<AuthResponse>>("auth/login", credentials);
+    const response = await api.post<ApiResponse<User>>("auth/login", credentials);
+    console.log(response.data);
 
-    return response.data.data!;
+    return {
+    user: response.data.data!,
+    token: response.data.token!
+  };
 }
 export const getCurrentUser = async (): Promise<User> => {
     const response = await api.get<ApiResponse<{ user: User }>>("auth/me");

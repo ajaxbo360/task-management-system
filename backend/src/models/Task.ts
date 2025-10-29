@@ -22,43 +22,43 @@ const taskSchema = new Schema<ITask>(
       required: [true, 'Please provide a task title'],
       trim: true,
       minlength: [3, 'Title must be at least 3 characters'],
-      maxlength: [100, 'Title cannot exceed 100 characters']
+      maxlength: [100, 'Title cannot exceed 100 characters'],
     },
     description: {
       type: String,
       required: [true, 'Please provide a task description'],
       trim: true,
-      maxlength: [500, 'Description cannot exceed 500 characters']
+      maxlength: [500, 'Description cannot exceed 500 characters'],
     },
     status: {
       type: String,
       enum: ['todo', 'in-progress', 'done'],
-      default: 'todo'
+      default: 'todo',
     },
     priority: {
       type: String,
       enum: ['low', 'medium', 'high'],
-      default: 'medium'
+      default: 'medium',
     },
     assignedTo: {
       type: Schema.Types.ObjectId,
-      ref: 'User'
+      ref: 'User',
     },
     createdBy: {
       type: Schema.Types.ObjectId,
       ref: 'User',
-      required: true
+      required: true,
     },
     teamId: {
       type: Schema.Types.ObjectId,
-      ref: 'Team'
+      ref: 'Team',
     },
     dueDate: {
-      type: Date
-    }
+      type: Date,
+    },
   },
   {
-    timestamps: true
+    timestamps: true,
   }
 );
 

@@ -1,58 +1,54 @@
-import mongoose, { Document, Schema } from "mongoose"
-import bcrypt  from "bcryptjs"
+import mongoose, { Document, Schema } from 'mongoose';
+import bcrypt from 'bcryptjs';
 export interface IUser extends Document {
-    name: string,
-    email: string,
-    password: string,
-    createdAt: Date,
-    updatedAt: Date,
-    comparePassword(enteredPassword: string): Promise<boolean>;
-
+  name: string;
+  email: string;
+  password: string;
+  createdAt: Date;
+  updatedAt: Date;
+  comparePassword(enteredPassword: string): Promise<boolean>;
 }
 
-
-const userSchema = new Schema<IUser>({
+const userSchema = new Schema<IUser>(
+  {
     name: {
-        type: String,
-        required:[true,"Please provide a name"],
-        trim: true,
-        minlength: [2, 'Name must be at least 2 characters'],
-        maxlength: [50, 'Name cannot exceed 50 characters'],
+      type: String,
+      required: [true, 'Please provide a name'],
+      trim: true,
+      minlength: [2, 'Name must be at least 2 characters'],
+      maxlength: [50, 'Name cannot exceed 50 characters'],
     },
     email: {
-         type: String,
+      type: String,
       required: [true, 'Please provide an email'],
       unique: true,
       lowercase: true,
       trim: true,
-      match: [
-        /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
-        'Please provide a valid email'
-      ]
+      match: [/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/, 'Please provide a valid email'],
     },
     password: {
-        type: String,
+      type: String,
       required: [true, 'Please provide a password'],
       minlength: [6, 'Password must be at least 6 characters'],
-      select: false
-    }
+      select: false,
+    },
+  },
+  {
+    timestamps: true,
+  }
+);
 
-},{
-    timestamps:true
-}) 
-
-userSchema.pre("save", async function (next) {
-    if (!this.isModified("password")) {
-        return next();
-    }
-    const salt = await bcrypt.genSalt(10);
+userSchema.pre('save', async function (next) {
+  if (!this.isModified('password')) {
+    return next();
+  }
+  const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
   next();
-})
-userSchema.methods.comparePassword = async function(enteredPassword: string): Promise<boolean> {
+});
+userSchema.methods.comparePassword = async function (enteredPassword: string): Promise<boolean> {
   return await bcrypt.compare(enteredPassword, this.password);
 };
 
-
-const User = mongoose.model<IUser>("User", userSchema);
+const User = mongoose.model<IUser>('User', userSchema);
 export default User;

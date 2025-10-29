@@ -11,7 +11,7 @@ export const getTasks = async (req: Request, res: Response): Promise<void> => {
 
     // Build filter object
     const filter: any = {
-      createdBy: req.user?.id  // Only get tasks created by this user
+      createdBy: req.user?.id, // Only get tasks created by this user
     };
 
     // Add optional filters
@@ -27,24 +27,23 @@ export const getTasks = async (req: Request, res: Response): Promise<void> => {
 
     // Get tasks from database
     const tasks = await Task.find(filter)
-      .populate('assignedTo', 'name email')  // Get user details
+      .populate('assignedTo', 'name email') // Get user details
       .populate('createdBy', 'name email')
-      .sort({ createdAt: -1 });  // Newest first
+      .sort({ createdAt: -1 }); // Newest first
 
     res.status(200).json({
       success: true,
       count: tasks.length,
       data: {
-        tasks
-      }
+        tasks,
+      },
     });
-
   } catch (error: any) {
     console.error('Get tasks error:', error);
     res.status(500).json({
       success: false,
       message: 'Server error getting tasks',
-      error: error.message
+      error: error.message,
     });
   }
 };
@@ -60,7 +59,7 @@ export const createTask = async (req: Request, res: Response): Promise<void> => 
     if (!title || !description) {
       res.status(400).json({
         success: false,
-        message: 'Please provide title and description'
+        message: 'Please provide title and description',
       });
       return;
     }
@@ -72,8 +71,8 @@ export const createTask = async (req: Request, res: Response): Promise<void> => 
       status: status || 'todo',
       priority: priority || 'medium',
       assignedTo,
-      createdBy: req.user?.id,  // Set creator to logged-in user
-      dueDate
+      createdBy: req.user?.id, // Set creator to logged-in user
+      dueDate,
     });
 
     // Populate user details
@@ -84,16 +83,15 @@ export const createTask = async (req: Request, res: Response): Promise<void> => 
       success: true,
       message: 'Task created successfully',
       data: {
-        task
-      }
+        task,
+      },
     });
-
   } catch (error: any) {
     console.error('Create task error:', error);
     res.status(500).json({
       success: false,
       message: 'Server error creating task',
-      error: error.message
+      error: error.message,
     });
   }
 };
@@ -110,7 +108,7 @@ export const getTask = async (req: Request, res: Response): Promise<void> => {
     if (!task) {
       res.status(404).json({
         success: false,
-        message: 'Task not found'
+        message: 'Task not found',
       });
       return;
     }
@@ -119,7 +117,7 @@ export const getTask = async (req: Request, res: Response): Promise<void> => {
     if (task.createdBy._id.toString() !== req.user?.id) {
       res.status(403).json({
         success: false,
-        message: 'Not authorized to access this task'
+        message: 'Not authorized to access this task',
       });
       return;
     }
@@ -127,16 +125,15 @@ export const getTask = async (req: Request, res: Response): Promise<void> => {
     res.status(200).json({
       success: true,
       data: {
-        task
-      }
+        task,
+      },
     });
-
   } catch (error: any) {
     console.error('Get task error:', error);
     res.status(500).json({
       success: false,
       message: 'Server error getting task',
-      error: error.message
+      error: error.message,
     });
   }
 };
@@ -151,7 +148,7 @@ export const updateTask = async (req: Request, res: Response): Promise<void> => 
     if (!task) {
       res.status(404).json({
         success: false,
-        message: 'Task not found'
+        message: 'Task not found',
       });
       return;
     }
@@ -160,20 +157,16 @@ export const updateTask = async (req: Request, res: Response): Promise<void> => 
     if (task.createdBy.toString() !== req.user?.id) {
       res.status(403).json({
         success: false,
-        message: 'Not authorized to update this task'
+        message: 'Not authorized to update this task',
       });
       return;
     }
 
     // Update task
-    task = await Task.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      {
-        new: true,  // Return updated document
-        runValidators: true  // Run schema validators
-      }
-    )
+    task = await Task.findByIdAndUpdate(req.params.id, req.body, {
+      new: true, // Return updated document
+      runValidators: true, // Run schema validators
+    })
       .populate('assignedTo', 'name email')
       .populate('createdBy', 'name email');
 
@@ -181,16 +174,15 @@ export const updateTask = async (req: Request, res: Response): Promise<void> => 
       success: true,
       message: 'Task updated successfully',
       data: {
-        task
-      }
+        task,
+      },
     });
-
   } catch (error: any) {
     console.error('Update task error:', error);
     res.status(500).json({
       success: false,
       message: 'Server error updating task',
-      error: error.message
+      error: error.message,
     });
   }
 };
@@ -205,7 +197,7 @@ export const deleteTask = async (req: Request, res: Response): Promise<void> => 
     if (!task) {
       res.status(404).json({
         success: false,
-        message: 'Task not found'
+        message: 'Task not found',
       });
       return;
     }
@@ -214,7 +206,7 @@ export const deleteTask = async (req: Request, res: Response): Promise<void> => 
     if (task.createdBy.toString() !== req.user?.id) {
       res.status(403).json({
         success: false,
-        message: 'Not authorized to delete this task'
+        message: 'Not authorized to delete this task',
       });
       return;
     }
@@ -224,15 +216,14 @@ export const deleteTask = async (req: Request, res: Response): Promise<void> => 
     res.status(200).json({
       success: true,
       message: 'Task deleted successfully',
-      data: {}
+      data: {},
     });
-
   } catch (error: any) {
     console.error('Delete task error:', error);
     res.status(500).json({
       success: false,
       message: 'Server error deleting task',
-      error: error.message
+      error: error.message,
     });
   }
 };

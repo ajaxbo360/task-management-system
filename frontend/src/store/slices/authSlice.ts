@@ -1,12 +1,19 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import type { AuthState, LoginCredentials, RegisterData } from '../../types';
+import type { AuthState, LoginCredentials, RegisterData, User } from '../../types';
 import * as authService from '../../services/authService';
+import { storage } from '../../utils/localStorage';
+
+// Get stored data from localStorage with proper validation
+
+const token = storage.getToken();
+const user = storage.getUser();
+
 
 // Initial state
 const initialState: AuthState = {
-  user: null,
-  token: localStorage.getItem('token'),
-  isAuthenticated: false,
+  user: user,
+  token: token,
+  isAuthenticated: !!token, // true if token exists
   loading: false,
   error: null,
 };
@@ -21,8 +28,8 @@ export const registerUser = createAsyncThunk(
       const response = await authService.register(data);
       
       // Save to localStorage
-      localStorage.setItem('token', response.token);
-      localStorage.setItem('user', JSON.stringify(response.user));
+      storage.setToken(response.token);
+      storage.setUser(response.user);
       
       return response;
     } catch (error: any) {
@@ -37,10 +44,8 @@ export const loginUser = createAsyncThunk(
   async (credentials: LoginCredentials, { rejectWithValue }) => {
     try {
       const response = await authService.login(credentials);
-      
-      // Save to localStorage
-      localStorage.setItem('token', response.token);
-      localStorage.setItem('user', JSON.stringify(response.user));
+       storage.setToken(response.token);
+      storage.setUser(response.user);
       
       return response;
     } catch (error:any) {
@@ -68,7 +73,8 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     logout: (state) => {
-      authService.logout();
+          authService.logout();
+          storage.clear(); 
       state.user = null;
       state.token = null;
       state.isAuthenticated = false;
